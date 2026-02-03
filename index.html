@@ -1,1 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tosaapp25 - Count Up</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        #counter {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #007AFF;
+            margin: 1rem 0;
+        }
+        button {
+            background-color: #007AFF;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
 
+    <div class="container">
+        <h1>tosaapp25です。<br>ボタンを押すとカウントアップします。</h1>
+        <div id="counter">0</div>
+        <button id="countBtn">カウントアップ！</button>
+    </div>
+
+    <script>
+        // 要素の取得
+        const counterDisplay = document.getElementById('counter');
+        const countBtn = document.getElementById('countBtn');
+
+        let count = 0;
+
+        // ボタンクリック時のイベントリスナー
+        countBtn.addEventListener('click', () => {
+            count++;
+            counterDisplay.textContent = count;
+            
+            // 少し遊び心：10ごとに色を変える
+            if (count % 10 === 0) {
+                counterDisplay.style.color = '#ff3b30';
+            } else {
+                counterDisplay.style.color = '#007AFF';
+            }
+        });
+    </script>
+</body>
+</html>
