@@ -3,79 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>tosaapp25 - Count Up</title>
+    <title>高知市内の公衆無線LANが利用できる施設</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f2f5;
-        }
-        .container {
-            text-align: center;
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #333;
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-        }
-        #counter {
-            font-size: 4rem;
+        body { margin: 0; padding: 0; font-family: 'Helvetica Neue', Arial, sans-serif; color: #333; }
+        #map { height: 70vh; width: 100%; }
+        .info-panel { padding: 20px; background: white; border-bottom: 2px solid #007AFF; }
+        h1 { font-size: 1.3rem; margin: 0 0 10px 0; color: #333; }
+        .description { font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px; }
+        .source-info { font-size: 0.8rem; color: #666; padding: 15px 20px; line-height: 1.6; background-color: #f9f9f9; }
+        .source-info a { color: #007AFF; text-decoration: none; }
+        .gmap-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 6px 12px;
+            background-color: #4285F4;
+            color: white !important;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.8rem;
             font-weight: bold;
-            color: #007AFF;
-            margin: 1rem 0;
-        }
-        button {
-            background-color: #007AFF;
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            font-size: 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.1s, background-color 0.2s;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        button:active {
-            transform: scale(0.95);
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>tosaapp25です。<br>ボタンを押すとカウントアップします。</h1>
-        <div id="counter">0</div>
-        <button id="countBtn">カウントアップ！</button>
+    <div class="info-panel">
+        <h1>高知市内の公衆無線LANが利用できる施設</h1>
+        <div class="description">
+            高知市ホームページに掲載されている、公衆無線LANが利用できる施設を地図上に表示しています。無線LANの利用条件などは高知市ホームページからご確認ください。
+        </div>
+    </div>
+    
+    <div id="map"></div>
+
+    <div class="source-info">
+        データ出典: 高知市ホームページ「無料Wi-Fiサービス」<br>
+        URL: <a href="https://www.city.kochi.kochi.jp/site/kanko/wi-fiservice.html" target="_blank">https://www.city.kochi.kochi.jp/site/kanko/wi-fiservice.html</a><br>
+        データは2026年2月3日時点のものです。
     </div>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 要素の取得
-        const counterDisplay = document.getElementById('counter');
-        const countBtn = document.getElementById('countBtn');
+        // 指定された9箇所がバランスよく見える位置
+        const map = L.map('map').setView([33.5450, 133.5500], 12);
 
-        let count = 0;
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
 
-        // ボタンクリック時のイベントリスナー
-        countBtn.addEventListener('click', () => {
-            count++;
-            counterDisplay.textContent = count;
+        const wifiSpots = [
+            { name: "はりまや橋観光バスターミナル", lat: 33.5592, lng: 133.5448, addr: "高知市はりまや町1-14" },
+            { name: "龍馬の生まれたまち記念館", lat: 33.5576, lng: 133.5283, addr: "高知市上町2-6-33" },
+            { name: "桂浜公園", lat: 33.4971, lng: 133.5746, addr: "高知市浦戸6" },
+            { name: "高知県観光情報発信館 とさてらす", lat: 33.5663, lng: 133.5436, addr: "高知市北本町2-10-17" },
+            { name: "高知城歴史博物館", lat: 33.5604, lng: 133.5350, addr: "高知市追手筋2-7-5" },
+            { name: "坂本龍馬記念館", lat: 33.4957, lng: 133.5721, addr: "高知市浦戸城山830" },
+            { name: "高知県立文学館", lat: 33.5617, lng: 133.5325, addr: "高知市丸ノ内1-1-20" },
+            { name: "高知県立美術館", lat: 33.5608, lng: 133.5750, addr: "高知市高須353-2" },
+            { name: "県民文化ホール", lat: 33.5567, lng: 133.5318, addr: "高知市本町4-3-30" }
+        ];
+
+        wifiSpots.forEach(spot => {
+            const marker = L.marker([spot.lat, spot.lng]).addTo(map);
             
-            // 少し遊び心：10ごとに色を変える
-            if (count % 10 === 0) {
-                counterDisplay.style.color = '#ff3b30';
-            } else {
-                counterDisplay.style.color = '#007AFF';
-            }
+            // Googleマップ検索用のURL
+            const gMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.name + ' ' + spot.addr)}`;
+            
+            marker.bindPopup(`
+                <div style="line-height:1.5;">
+                    <strong>${spot.name}</strong><br>
+                    <span style="font-size:0.8rem; color:#666;">${spot.addr}</span><br>
+                    <a href="${gMapUrl}" target="_blank" class="gmap-btn">Google Mapで開く</a>
+                </div>
+            `);
         });
     </script>
 </body>
