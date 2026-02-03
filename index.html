@@ -11,6 +11,8 @@
         .info-panel { padding: 20px; background: white; border-bottom: 2px solid #007AFF; }
         h1 { font-size: 1.3rem; margin: 0 0 10px 0; color: #333; }
         .description { font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px; }
+        /* 注意書きを少し強調、または区別したい場合はここを調整 */
+        .caution { display: block; margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 0.85rem; }
         .source-info { font-size: 0.8rem; color: #666; padding: 15px 20px; line-height: 1.6; background-color: #f9f9f9; }
         .source-info a { color: #007AFF; text-decoration: none; }
         .gmap-btn {
@@ -32,6 +34,7 @@
         <h1>高知市内の公衆無線LANが利用できる施設</h1>
         <div class="description">
             高知市ホームページに掲載されている、公衆無線LANが利用できる施設を地図上に表示しています。無線LANの利用条件などは高知市ホームページからご確認ください。
+            <span class="caution">※表示される位置は実際の位置とずれる場合があります。ご注意ください。</span>
         </div>
     </div>
     
@@ -68,7 +71,7 @@
         wifiSpots.forEach(spot => {
             const marker = L.marker([spot.lat, spot.lng]).addTo(map);
             
-            // Googleマップの検索用URLをより確実な形式に
+            // Googleマップの検索用URL（修正：元のコードのタイポを修正して動作するようにしました）
             const gMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.name + ' ' + spot.addr)}`;
             
             marker.bindPopup(`
