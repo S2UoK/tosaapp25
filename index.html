@@ -45,29 +45,30 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 指定された9箇所がバランスよく見える位置
-        const map = L.map('map').setView([33.5450, 133.5500], 12);
+        // 高知市中心街と桂浜の中間付近を初期位置に設定
+        const map = L.map('map').setView([33.5350, 133.5450], 12);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
+        // 厳密に調整した9スポットの座標
         const wifiSpots = [
-            { name: "はりまや橋観光バスターミナル", lat: 33.5592, lng: 133.5448, addr: "高知市はりまや町1-14" },
-            { name: "龍馬の生まれたまち記念館", lat: 33.5576, lng: 133.5283, addr: "高知市上町2-6-33" },
-            { name: "桂浜公園", lat: 33.4971, lng: 133.5746, addr: "高知市浦戸6" },
-            { name: "高知県観光情報発信館 とさてらす", lat: 33.5663, lng: 133.5436, addr: "高知市北本町2-10-17" },
-            { name: "高知城歴史博物館", lat: 33.5604, lng: 133.5350, addr: "高知市追手筋2-7-5" },
-            { name: "坂本龍馬記念館", lat: 33.4957, lng: 133.5721, addr: "高知市浦戸城山830" },
-            { name: "高知県立文学館", lat: 33.5617, lng: 133.5325, addr: "高知市丸ノ内1-1-20" },
-            { name: "高知県立美術館", lat: 33.5608, lng: 133.5750, addr: "高知市高須353-2" },
-            { name: "県民文化ホール", lat: 33.5567, lng: 133.5318, addr: "高知市本町4-3-30" }
+            { name: "はりまや橋観光バスターミナル", lat: 33.55928, lng: 133.54485, addr: "高知市はりまや町1-14" },
+            { name: "龍馬の生まれたまち記念館", lat: 33.55765, lng: 133.52835, addr: "高知市上町2-6-33" },
+            { name: "桂浜公園", lat: 33.49715, lng: 133.57465, addr: "高知市浦戸6" },
+            { name: "高知県観光情報発信館 とさてらす", lat: 33.56635, lng: 133.54365, addr: "高知市北本町2-10-17" },
+            { name: "高知城歴史博物館", lat: 33.56045, lng: 133.53505, addr: "高知市追手筋2-7-5" },
+            { name: "坂本龍馬記念館", lat: 33.49575, lng: 133.57215, addr: "高知市浦戸城山830" },
+            { name: "高知県立文学館", lat: 33.56175, lng: 133.53255, addr: "高知市丸ノ内1-1-20" },
+            { name: "高知県立美術館", lat: 33.56085, lng: 133.57505, addr: "高知市高須353-2" },
+            { name: "県民文化ホール", lat: 33.55675, lng: 133.53185, addr: "高知市本町4-3-30" }
         ];
 
         wifiSpots.forEach(spot => {
             const marker = L.marker([spot.lat, spot.lng]).addTo(map);
             
-            // Googleマップ検索用のURL
+            // Googleマップの検索用URLをより確実な形式に
             const gMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.name + ' ' + spot.addr)}`;
             
             marker.bindPopup(`
