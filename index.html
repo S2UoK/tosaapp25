@@ -11,21 +11,22 @@
         .info-panel { padding: 20px; background: white; border-bottom: 2px solid #007AFF; }
         h1 { font-size: 1.3rem; margin: 0 0 10px 0; color: #333; }
         .description { font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px; }
-        /* 注意書きを少し強調、または区別したい場合はここを調整 */
         .caution { display: block; margin-top: 5px; color: #d32f2f; font-weight: bold; font-size: 0.85rem; }
         .source-info { font-size: 0.8rem; color: #666; padding: 15px 20px; line-height: 1.6; background-color: #f9f9f9; }
         .source-info a { color: #007AFF; text-decoration: none; }
         .gmap-btn {
             display: inline-block;
             margin-top: 10px;
-            padding: 6px 12px;
+            padding: 8px 12px;
             background-color: #4285F4;
             color: white !important;
             text-decoration: none;
             border-radius: 4px;
             font-size: 0.8rem;
             font-weight: bold;
+            transition: background 0.3s;
         }
+        .gmap-btn:hover { background-color: #3367D6; }
     </style>
 </head>
 <body>
@@ -43,20 +44,21 @@
     <div class="source-info">
         データ出典: 高知市ホームページ「無料Wi-Fiサービス」<br>
         URL: <a href="https://www.city.kochi.kochi.jp/site/kanko/wi-fiservice.html" target="_blank">https://www.city.kochi.kochi.jp/site/kanko/wi-fiservice.html</a><br>
-        データは2026年2月3日時点のものです。
+        データは2026年2月6日時点のものです。
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 高知市中心街と桂浜の中間付近を初期位置に設定
-        const map = L.map('map').setView([33.5350, 133.5450], 12);
+        // 高知市中心街を初期位置に設定
+        const map = L.map('map').setView([33.5590, 133.5430], 13);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        // 厳密に調整した9スポットの座標
+        // 厳密に固定された10スポットのデータ
         const wifiSpots = [
+            { name: "こうち観光ナビ・ツーリストセンター", lat: 33.5602, lng: 133.5415, addr: "高知市帯屋町1-6-1" },
             { name: "はりまや橋観光バスターミナル", lat: 33.55928, lng: 133.54485, addr: "高知市はりまや町1-14" },
             { name: "龍馬の生まれたまち記念館", lat: 33.55765, lng: 133.52835, addr: "高知市上町2-6-33" },
             { name: "桂浜公園", lat: 33.49715, lng: 133.57465, addr: "高知市浦戸6" },
@@ -71,13 +73,13 @@
         wifiSpots.forEach(spot => {
             const marker = L.marker([spot.lat, spot.lng]).addTo(map);
             
-            // Googleマップの検索用URL（修正：元のコードのタイポを修正して動作するようにしました）
+            // Googleマップの検索用URLを正しく構築
             const gMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.name + ' ' + spot.addr)}`;
             
             marker.bindPopup(`
-                <div style="line-height:1.5;">
-                    <strong>${spot.name}</strong><br>
-                    <span style="font-size:0.8rem; color:#666;">${spot.addr}</span><br>
+                <div style="line-height:1.5; min-width:160px;">
+                    <strong style="font-size:1rem;">${spot.name}</strong><br>
+                    <span style="font-size:0.85rem; color:#666;">${spot.addr}</span><br>
                     <a href="${gMapUrl}" target="_blank" class="gmap-btn">Google Mapで開く</a>
                 </div>
             `);
